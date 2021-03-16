@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Joe's Hotdogs </title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <style>
+    table {
+      margin-left: auto;
+      margin-right: auto;
+      border-collapse: collapse;
+      font-size: 0.9em;
+      font-family: sans-serif;
+      min-width: 400px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      }
+
+    #btn {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    text-align: center;
+    padding: 8px 15px;
+    display: block;
+    width: 150px;    
+    display: block;
+    border: 0;
+    background: #333;
+    color: #fff;
+    border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<img src="bImage.jpeg" width="500">
+  <h1> Welcome to Joe's Hotdogs</h1>
+<table>
+    <thead>
+    <tr>
+        <th> Quantity</th>
+        <th> Name </th>
+        <th> Unit Price </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td> <select id="quan-1"></select> </td>
+        <td> Hotdogs</td>
+        <td> $3.25 </td>
+    </tr>
+    <tr>
+        <td> <select id="quan-2"></select> </td>
+        <td> French Fries </td>
+        <td>$2.00</td>
+    </tr>
+    
+    <tr>
+        <td> <select id="quan-3"></select> </td>
+        <td> Drinks </td>
+        <td>$1.50</td>
+    </tr>    
+    </tbody>
+    
+</table>
+<!--Add button-->
+
+<input id ="btn" type="submit" value="Order" onclick="order()">
+
+<script language = "javascript">
+
+// Initializing the options for quantity
+  var options = "";
+  var quantities = [0, 1,2,3,4,5,10,15,20];
+  for(var i in quantities){
+    options += "<option>"+ quantities[i] +"</option>";
+  }
+  document.getElementById("quan-1").innerHTML = options;
+  document.getElementById("quan-2").innerHTML = options;
+  document.getElementById("quan-3").innerHTML = options;
+
+
+// Order button
+function order(){
+  // hotdogs quantity
+  var a = document.getElementById("quan-1");
+   hotdogs = a.options[a.selectedIndex].value;
+
+  // french fries quantity
+  var b = document.getElementById("quan-2");
+  var fries = b.options[b.selectedIndex].value;
+
+  
+  // drink quantity
+  var c = document.getElementById("quan-3");
+  var drinks = c.options[c.selectedIndex].value;
+
+  if (hotdogs == 0 &&  fries == 0 &&  drinks == 0)
+  {
+    alert(' Please select at least one menu option ')
+  }
+  else{
+    calculate(hotdogs, fries, drinks);
+  }
+  
+ }
+ 
+function calculate(hotdogs, fries, drinks)
+{
+  // using the specifications from hw3.
+  let HOTDOGS_UNIT_PRICE = 3.25;
+  let FRIES_UNIT_PRICE = 2.00;
+  let DRINKS_UNIT_PRICE = 1.50;
+  let DISCOUNT = 0.1;
+  let TAX = 0.0625;
+    
+    // parse to floats
+    // Note: They're strings
+    hotdogs = parseFloat(hotdogs);
+  fries = parseFloat(fries);
+  drinks = parseFloat(drinks);
+    
+    // round them up
+    hotdogs = parseFloat(hotdogs.toFixed(2));
+  fries = parseFloat(fries.toFixed(2));
+  drinks = parseFloat(drinks.toFixed(2));
+    
+    total_hotdogs = (hotdogs * HOTDOGS_UNIT_PRICE);
+    total_fries = (fries * FRIES_UNIT_PRICE);
+    total_drinks = (drinks * DRINKS_UNIT_PRICE);
+  
+    
+   
+    subtotal = total_hotdogs + total_fries + total_drinks;
+    
+    if (subtotal >= 20.00){
+      new_subtotal = subtotal *(1 - DISCOUNT);
+        new_subtotal = parseFloat(new_subtotal.toFixed(2))   
+    }
+   
+    else{
+      new_subtotal = subtotal;   
+    }
+  
+  let discount = subtotal - new_subtotal;
+  
+  let tax = new_subtotal * TAX;
+  tax = parseFloat(tax.toFixed(2));
+ 
+  let total = new_subtotal + tax - discount;
+  total = parseFloat(total.toFixed(2));
+  
+  // Display order in a different window
+  var win = window.open();
+  win.document.write('<html><head><title>Print it!</title><link rel="stylesheet" type="text/css" href="style.css"></head> <body text-align: center>');
+  win.document.write('<img src="bImage.jpeg" width="500">')
+
+
+   win.document.write("<br>");
+    let str = "Receipt";
+    win.document.write(str.bold());
+    win.document.write("<br>");
+    win.document.write(hotdogs," Hotdogs:..............................$", total_hotdogs, "<br>")
+    win.document.write(fries, " French Fries:.......................$", total_fries, "<br>");
+    win.document.write(drinks," Drinks:..................................$", total_drinks, "<br>");
+    win.document.write("<br>");
+    win.document.write("Subtotal:.............................$", subtotal, "<br>");
+    win.document.write("Discount:............................- $", discount, "<br>");
+    win.document.write("Tax:...................................$", tax, "<br>");
+    win.document.write("TOTAL:............................ $", total);
+    win.document.write('</body> </html>');
+}
+</script>
+
+
+
+</body>
+</html>
+
